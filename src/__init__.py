@@ -1,12 +1,7 @@
-from flask import Flask
-import pymongo
+from flask import Flask, render_template
 from bson.json_util import dumps
 import json
-from settings import db, conn
-
-client = pymongo.MongoClient(conn)
-
-dbconn = pymongo.database.Database(client, db)
+from .connections import client, dbconn, pymongo
 
 col = pymongo.collection.Collection(dbconn, 'users')
 
@@ -14,8 +9,11 @@ app = Flask(__name__)
 
 @app.route("/")
 def index():
-    col.insert_one({'name':'bismillah'})
-    return '<h1>added users was successfull!</h1>'
+    return render_template("home.html")
+
+@app.route("/login")
+def login():
+    return render_template("login.html")
 
 if(__name__ == "__main__"):
     app.run()
