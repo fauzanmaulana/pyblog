@@ -79,5 +79,15 @@ def registerpost():
     session['user'] = user
     return redirect(url_for("blog"))
 
+
+@app.route("/logout")
+def logout():
+    if 'user' in session:
+        session.pop('user', None)
+        return redirect(url_for("login"))
+    else:
+        return redirect(url_for("login"))
+
+
 if(__name__ == "__main__"):
     app.run()
