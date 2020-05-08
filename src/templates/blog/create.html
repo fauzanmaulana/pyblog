@@ -1,0 +1,25 @@
+{% extends 'base/layout.html' %}
+
+{% block content %}
+    <div class="container">
+        <div>&nbsp;</div>
+        <form method="post">
+            <div class="file-field input-field">
+                <div class="waves-effect waves-light blue darken-1 btn">
+                  <span>choose</span>
+                  <input type="file">
+                </div>
+                <div class="file-path-wrapper">
+                  <input class="file-path validate" type="text" placeholder="your featured image here">
+                </div>
+            </div>
+            <textarea id="title" name="blogtitle"></textarea>
+            <div>&nbsp;</div>
+            <textarea id="desc" name="blogdata"></textarea>
+            <div>&nbsp;</div>
+            <button type="submit" class="right waves-effect waves-light blue darken-1 btn">Post</button>
+            <div>&nbsp;</div>
+            <div>&nbsp;</div>
+        </form>
+    </div>
+{% endblock %}

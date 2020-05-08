@@ -10,6 +10,8 @@
     <!-- Flask-Materialize. Availible at https://github.com/HellerCommaA/flask-materialize -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/css/materialize.min.css">
+    <!-- summernote css -->
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote-lite.min.css" rel="stylesheet">
     {%- endblock styles %}
 {%- endblock head %}
 
@@ -28,14 +30,14 @@
         </nav>
     {% else %}
         <ul id="dropdown1" class="dropdown-content">
-            <li><a href="#!">new blog</a></li>
-            <li><a href="#!">my blog</a></li>
+            <li><a href="{{ url_for('blogcreate') }}">create blog</a></li>
+            <li><a href="{{ url_for('myblog') }}">my blog</a></li>
             <li><a href="{{ url_for('logout') }}">logout</a></li>
         </ul>
         <nav class="blue lighten-1">
             <div class="container">
                 <div class="nav-wrapper">
-                    <a href="#!" class="brand-logo">Pyblog</a>
+                    <a href="{{ url_for('blog') }}" class="brand-logo">Pyblog</a>
                     <ul class="right hide-on-med-and-down">
                         <!-- Dropdown Trigger -->
                         <li><a class="dropdown-trigger" href="#!" data-target="dropdown1">{{user["username"]}}<i class="material-icons right">arrow_drop_down</i></a></li>
@@ -49,7 +51,32 @@
 {% block scripts %}
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
+    <!-- summernote css -->
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote-lite.min.js"></script>
     <script>
         $(".dropdown-trigger").dropdown();
+
+        $('#title').summernote({
+            placeholder: 'your title here',
+            tabsize: 2,
+            height: 70,
+            toolbar: [
+                ['style', ['style']]
+            ]
+        });
+
+        $('#desc').summernote({
+            placeholder: 'your content here',
+            tabsize: 2,
+            height: 350,
+            toolbar: [
+                ['style', ['style']],
+                ['font', ['bold', 'underline', 'clear']],
+                ['fontname', ['fontname']],
+                ['color', ['color']],
+                ['para', ['ul', 'ol', 'paragraph']],
+                ['insert', ['link', 'picture']]
+            ]
+        });
     </script>
 {%- endblock scripts %}

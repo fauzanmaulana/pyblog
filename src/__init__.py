@@ -4,8 +4,10 @@ from bson.json_util import dumps
 import json
 from bson.objectid import ObjectId
 from .connections import usercoll, blogcoll, secret_keys
-from .models import users, blogs
+from .models.User import User
+from .models.Blog import Blog
 from werkzeug.security import generate_password_hash, check_password_hash
+from datetime import date
 
 class JSONEncoder(json.JSONEncoder):
     def default(self, o):
@@ -25,13 +27,13 @@ Material(app)
 
 @app.route("/")
 def index():
-    # session.pop('user', None)
     return render_template("home.html")
 
 @app.route("/blog")
 def blog():
     if 'user' in session:
-        return render_template("blog.html", user=session["user"])
+        blogs = blogcoll.find()
+        return render_template("blog/main.html", user=session["user"], blogs=blogs)
     else:
         return redirect(url_for("login"))
 
@@ -54,7 +56,8 @@ def loginpost():
             session['user'] = emailCheck
             return redirect(url_for("blog"))
         else:
-            return "gagal login"
+            session['message'] = "login was fails, please check your password"
+            return redirect(url_for("login"))
     else:
         session['message'] = "login was fails, please check your email or password"
         return redirect(url_for("login"))
@@ -72,8 +75,7 @@ def registerpost():
     password = request.form['password']
     pwhash = generate_password_hash(password, "sha256")
 
-    regist = usercoll.insert_one(users(username, email, pwhash))
-    
+    regist = usercoll.insert_one(User(username, email, pwhash).obj())
     user = usercoll.find_one({"email" : email})
 
     session['user'] = user
@@ -87,6 +89,31 @@ def logout():
         return redirect(url_for("login"))
     else:
         return redirect(url_for("login"))
+
+
+@app.route("/blog/create", methods=["GET", "POST"])
+def blogcreate():
+    if request.method == "GET":
+        if 'user' in session:
+            return render_template("blog/create.html", user=session["user"])
+        else:
+            return redirect(url_for("login"))
+    elif request.method == "POST":
+        datepost = str(date.today())
+        blogins = blogcoll.insert_one(Blog(session['user']['_id'], request.form.get("blogtitle"), request.form.get("blogdata"), "image featured", datepost).obj())
+        return "alhamdullilah"
+
+@app.route("/blog/me")
+def myblog():
+    if 'user' in session:
+        return render_template("blog/ownpost.html", user=session["user"])
+    else:
+        return redirect(url_for("login"))
+
+@app.route("/blogpost")
+def blogpost():
+    datepost = date.today()
+
 
 
 if(__name__ == "__main__"):

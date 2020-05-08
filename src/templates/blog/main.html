@@ -1,0 +1,27 @@
+{% extends 'base/layout.html' %}
+
+{% block content %}
+    <div class="container">
+        <div>&nbsp;</div>
+        <div class="row">
+            {% for blog in blogs %}
+                {% set featuredimage = blog['image'] %}
+                <div class="col s6">
+                    <div class="card horizontal hoverable" style="cursor: pointer;">
+                        <div class="card-image" style="background: url('{{featuredimage}}'); min-width: 150px; min-height: 150px; background-size: cover;"></div>
+                        <div class="card-stacked">
+                            <div class="card-content">
+                            <span class="card-title">{{ blog['title'] }}</span>
+                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius reprehenderit in repellat dolore. Nobis quisquam.</p>
+                            </div>
+                            <div class="card-action">
+                                <span class="right grey-text text-lighten">{{ blog['date'] }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+    </div>
+{% endblock %}
